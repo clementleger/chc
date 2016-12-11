@@ -1,0 +1,4 @@
+
+%_reduced.json: %.json
+	cat $< | egrep -v "^[[:blank:]]*#" | tr -d "[:space:]" > $@
+	
