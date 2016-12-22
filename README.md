@@ -5,22 +5,26 @@ It aims at beeing the low level interface between the server and the electric pa
 For that, it is connected through ethernet to the home network.
 
 The board has a lot of IO such as:
- * Sensors:
+* Sensors:
 	* BME280
 	* BH1750
 	* DS18B20
+
 * GPIO:
 	* Microcontroller GPIO
 	* Shift register (74hc595)
 	* PCF8574 GPIO expander
+
 * Screen:
 	* ILI9341
 	* SSD1306
+
 * Buses:
 	* I2C
 	* SPI
 	* OneWire
 	* RS485
+
 * Ethernet:
 	* Wiznet W5100/5200, etc
 
