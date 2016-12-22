@@ -1,4 +1,4 @@
 - Add support for analog inputs
-- Add support for SCT-013 AC current sensor
-- Add a shell on debug com
+	- Add support for SCT-013 AC current sensor
 - Add RS485 support
+- Switch from JSON to device tree
