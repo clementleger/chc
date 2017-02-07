@@ -22,6 +22,19 @@ typedef struct rs485_bus {
 
 SLIST_HEAD(, rs485_bus) g_rs485_bus_list = SLIST_HEAD_INITIALIZER(g_rs485_bus_list);
 
+rs485_bus_t *
+rs485_bus_get_by_name(const char *name)
+{
+	struct rs485_bus *bus;
+
+	SLIST_FOREACH(bus, &g_rs485_bus_list, link) {
+		if (strncmp(name, bus->name, strlen(name)) == 0)
+			return bus;
+	}
+
+	return NULL;
+}
+
 
 int
 rs485_bus_write(rs485_bus_t *rs, const uint8_t *data, unsigned int length)

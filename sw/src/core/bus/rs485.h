@@ -7,4 +7,7 @@
 void
 rs485_init();
 
+rs485_bus_t *
+rs485_bus_get_by_name(const char *name);
+
 #endif
