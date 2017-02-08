@@ -17,6 +17,13 @@
 		"scl": "PA_8",
 		"freq": 100000
 	}],
+	"rs485": [{
+		"name": "rs485_1",
+		"de": "PC_14",
+		"tx": "PA_15",
+		"rx": "PB_7",
+		"baudrate": 115200
+	}],
 	"spi": [{
 		"name": "spi1",
 		"mosi": "PB_15",
@@ -536,6 +543,11 @@
 				"refresh": 30000,
 				"id": 63,
 				"auto": 1
+			}
+		],
+		"mysensors_rs485": [
+			{
+				"rs485": "rs485_1"
 			}
 		],
 		"constraints": [

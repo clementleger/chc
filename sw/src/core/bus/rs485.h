@@ -1,11 +1,10 @@
-#ifndef _COMMUNICATION_H
-#define _COMMUNICATION_H
-
-#include "json.h"
-#include "queue.h"
+#ifndef _RS485_H
+#define _RS485_H
 
 void
 rs485_init();
+
+typedef struct rs485_bus rs485_bus_t;
 
 rs485_bus_t *
 rs485_bus_get_by_name(const char *name);
