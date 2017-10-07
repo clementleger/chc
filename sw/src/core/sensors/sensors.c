@@ -74,6 +74,23 @@ sensors_sensor_created(sensor_t* s)
 	return 0;
 }
 
+void
+sensors_present()
+{
+	int i;
+	
+	sensor_t *s;
+
+	for (i = 0; i < MAX_SENSOR_COUNT; i++) {
+		if (g_sensors[i] == NULL)
+			continue;
+
+		s = g_sensors[i];
+
+		sensors_sensor_created(s);
+	}
+}
+
 sensor_t *
 sensor_create(sensors_type_t type, const char *name, unsigned char id, const sensors_ops_t *ops, void *data)
 {

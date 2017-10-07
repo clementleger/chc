@@ -18,107 +18,6 @@
  */
 static unsigned char g_assigned_node_id = 0;
 
-static int
-mysensors_split_message(char *str, char *split_str[6])
-{
-	int i;
-	char *next = str;
-
-	for (i = 0; i < 6; i++) {
-		split_str[i] = next;
-		if (i == 5)
-			break;
-
-		next = strchr(next, ';');
-		if (next == NULL)
-			return 1;
-		*next = '\0';
-		next++;
-	}
-
-	return 0;
-}
-
-static void
-mysensors_set_sensor(sensor_t *s, __unused__ int subtype, char *payload)
-{
-	sensor_value_t value;
-	if (sensor_get_type(s) == SENSORS_TYPE_SWITCH) {
-		value.val_i = atoi(payload);
-		sensor_set_value(s, value);
-	} else {
-		dbg_log("Request to set sensor which is not a switch one\n");
-	}
-}
-
-static int
-mysensors_parse_single_message(char *query)
-{
-	unsigned char child_sensor_id, message_type, ack, subtype;
-	char *split_str[6], *payload;
-	sensor_t *sensor;
-	
-	dbg_log("Parsing message\n");
-
-	if (mysensors_split_message(query, split_str) != 0)
-		return 0;
-
-	dbg_log("Message parsed\n");
-	if (atoi(split_str[0]) != g_assigned_node_id)
-		return 0;
-
-	child_sensor_id = atoi(split_str[1]);
-
-	sensor = sensors_get_by_id(child_sensor_id);
-	if (sensor == NULL)
-		return 0;
-
-	message_type = atoi(split_str[2]);
-	ack = atoi(split_str[3]);
-	subtype = atoi(split_str[4]);
-	payload = split_str[5];
-
-	switch (message_type) {
-		case SET_VARIABLE:
-			mysensors_set_sensor(sensor, subtype, payload);
-		break;
-		case REQUEST_VARIABLE:
-		break;
-	};
-
-	if (ack) {
-		dbg_log("Ack requested\n");
-	}
-
-	return 1;
-}
-
-static int
-mysensors_parse_message(char *query)
-{
-	char *tmp = query;
-	char *start = query;
-
-	do {
-		tmp = strchr(start, '\n');
-		if (tmp != NULL)
-			*tmp = 0;
-		if (start[0] == '\0')
-			break;
-
-		mysensors_parse_single_message(start);
-
-		if (tmp == NULL) {
-			break;
-		} else {
-			tmp++;
-			start = tmp;
-		}
-	} while(1);
-
-	return 1;
-}
-
 
 #define MYSENSORS_MSG_FORMAT	"%d;%d;%d;%d;%d;"
 
@@ -153,6 +52,124 @@ mysensors_send_float(uint16_t node_id, uint8_t child_sensor_id, uint16_t message
 
 	snprintf(buffer, MYSENSOR_MAX_MSG_LENGTH, MYSENSORS_MSG_FORMAT "%.2f\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
 	std_puts(buffer);
+}
+
+static int
+mysensors_split_message(char *str, char *split_str[6])
+{
+	int i;
+	char *next = str;
+
+	for (i = 0; i < 6; i++) {
+		split_str[i] = next;
+		if (i == 5)
+			break;
+
+		next = strchr(next, ';');
+		if (next == NULL)
+			return 1;
+		*next = '\0';
+		next++;
+	}
+
+	return 0;
+}
+
+static void
+mysensors_set_sensor(sensor_t *s, __unused__ int subtype, char *payload)
+{
+	sensor_value_t value;
+	if (sensor_get_type(s) == SENSORS_TYPE_SWITCH) {
+		value.val_i = atoi(payload);
+		sensor_set_value(s, value);
+	} else {
+		dbg_log("Request to set sensor which is not a switch one\n");
+	}
+}
+
+
+void mysensors_handle_internal(int subtype, __unused__ char *payload)
+{
+	switch(subtype) {
+		case I_PRESENTATION:
+			mysensors_serial_send_str(0, 255, INTERNAL, REQUEST, I_SKETCH_VERSION, "1.0");
+			mysensors_serial_send_str(0, 255, INTERNAL, REQUEST, I_SKETCH_NAME, "chc");
+			sensors_present();
+			break;
+		default:
+			dbg_log("Unhanled internal message %s\n", subtype);
+	}
+}
+
+static int
+mysensors_parse_single_message(char *query)
+{
+	unsigned char child_sensor_id, message_type, ack, subtype;
+	char *split_str[6], *payload;
+	sensor_t *sensor;
+	
+	dbg_log("Parsing message %s\n", query);
+
+	if (mysensors_split_message(query, split_str) != 0)
+		return 0;
+
+	dbg_log("Message parsed\n");
+	if (atoi(split_str[0]) != g_assigned_node_id)
+		return 0;
+
+	child_sensor_id = atoi(split_str[1]);
+	message_type = atoi(split_str[2]);
+	ack = atoi(split_str[3]);
+	subtype = atoi(split_str[4]);
+	payload = split_str[5];
+
+	switch (message_type) {
+		case SET_VARIABLE:
+			sensor = sensors_get_by_id(child_sensor_id);
+			if (sensor == NULL) {
+				dbg_log("Failed to find sensor %d\n", child_sensor_id);
+				return 0;
+			}
+			mysensors_set_sensor(sensor, subtype, payload);
+		break;
+		case REQUEST_VARIABLE:
+		break;
+		case INTERNAL:
+			mysensors_handle_internal(subtype, payload);
+		break;
+	};
+
+	if (ack) {
+		dbg_log("Ack requested\n");
+	}
+
+	return 1;
+}
+
+static int
+mysensors_parse_message(char *query)
+{
+	char *tmp = query;
+	char *start = query;
+
+	do {
+		tmp = strchr(start, '\n');
+		if (tmp != NULL)
+			*tmp = 0;
+		if (start[0] == '\0')
+			break;
+
+		mysensors_parse_single_message(start);
+
+		if (tmp == NULL) {
+			break;
+		} else {
+			tmp++;
+			start = tmp;
+		}
+	} while(1);
+
+	return 1;
 }
 
 static int

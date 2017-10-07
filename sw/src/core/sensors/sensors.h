@@ -216,6 +216,10 @@ sensor_get_value(sensor_t *s, sensor_value_t *value);
 int
 sensors_sensor_update(sensor_t* s, sensor_value_t new_value);
 
+/* Force presentation of all sensors */
+void
+sensors_present();
+
 /**
  * Init sensor module
  */
