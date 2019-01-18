@@ -209,36 +209,33 @@ hal_uart_read(hal_uart_t *uart, uint8_t *data, unsigned int length, unsigned int
 typedef struct hal_analog_in hal_analog_in_t;
 
 /**
- * Create a gpio object from parameters
+ * Setup an anlog input from a gpio_name
  * @param gpio_name GPIO name
- * @param reverse Reverse the gpio direction
- * @param direction GPIO direction (input/output)
+ * @return An analog object on success
  */
 hal_analog_in_t *
 hal_analog_in_setup(const char *gpio_name);
 
 /**
  * Set a gpio state
- * @param gpio The gpio to set value
- * @param state State to set
+ * @param analog_in The analog_in object to operate on
  * @return 0 on success, a positive value on error
  */
 void
 hal_analog_in_start_conv(hal_analog_in_t *analog_in);
 
 /**
- * Set a gpio state
- * @param gpio The gpio to set value
- * @param state State to set
+ * Check if analog is ready (ie there is a value)
+ * @param analog_in The analog_in object to operate on
  * @return 0 on success, a positive value on error
  */
 int
 hal_analog_in_is_ready(hal_analog_in_t *analog_in);
 
 /**
- * Get a gpio state
- * @param gpio The gpio to get value from
- * @return gpio value
+ * Read an analog value
+ * @param analog_in The analog_in object to operate on
+ * @return Analog value read on pin
  */
 float
 hal_analog_in_read(hal_analog_in_t *analog_in);
