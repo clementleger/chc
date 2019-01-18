@@ -10,7 +10,7 @@
 
 #include <string.h>
 
-enum default_prot {
+enum default_port {
 	NET_STD_PORT = 13489,
 	NET_DBG_PORT,
 };
