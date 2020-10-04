@@ -67,8 +67,8 @@ digital_io_json_parse_one(json_value* sensor)
 	dio = malloc(sizeof(digital_io_t));
 	PANIC_ON(!dio, "Alloc failed");
 
-        length = sensor->u.object.length;
-        for (i = 0; i < length; i++) {
+	length = sensor->u.object.length;
+	for (i = 0; i < length; i++) {
 		value = sensor->u.object.values[i].value;
 		name = sensor->u.object.values[i].name;
 
@@ -93,9 +93,9 @@ digital_io_json_parse_one(json_value* sensor)
 				case 'o': s_mode = GPIO_MODE_OPEN_DRAIN; break;
 			}
 		}
-        }
+	}
 
-        PANIC_ON(s_name == NULL || s_gpio_name == NULL,
+	PANIC_ON(s_name == NULL || s_gpio_name == NULL,
 			"Incomplete sensor description");
 	dio->io = gen_io_setup(s_gpio_name, s_reverse, s_gpio_dir, s_debounce, s_mode);
 	dio->s = sensor_create(SENSORS_TYPE_SWITCH, s_name, s_id, &digital_io_ops, dio);

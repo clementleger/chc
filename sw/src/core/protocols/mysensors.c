@@ -21,16 +21,34 @@ static unsigned char g_assigned_node_id = 0;
 
 #define MYSENSORS_MSG_FORMAT	"%d;%d;%d;%d;%d;"
 
-/**
- * FIXME: generate or make these function generic
- */
+void
+mysensors_print_msg_str(char buffer[MYSENSOR_MAX_MSG_LENGTH], uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
+				uint8_t ack, uint16_t sub_type, char *payload)
+{
+	snprintf(buffer, MYSENSOR_MAX_MSG_LENGTH, MYSENSORS_MSG_FORMAT "%s\n", node_id, child_sensor_id, message_type, ack, sub_type, payload);
+}
+
+void
+mysensors_print_msg_int(char buffer[MYSENSOR_MAX_MSG_LENGTH], uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
+				uint8_t ack, uint16_t sub_type, int value)
+{
+	snprintf(buffer, MYSENSOR_MAX_MSG_LENGTH, MYSENSORS_MSG_FORMAT "%d\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
+}
+
+void
+mysensors_print_msg_float(char buffer[MYSENSOR_MAX_MSG_LENGTH], uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
+				uint8_t ack, uint16_t sub_type, float value)
+{
+	snprintf(buffer, MYSENSOR_MAX_MSG_LENGTH, MYSENSORS_MSG_FORMAT "%.2f\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
+}
+
 static void
 mysensors_serial_send_str(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
 				uint8_t ack, uint16_t sub_type, char *payload)
 {
 	char buffer[MYSENSOR_MAX_MSG_LENGTH];
 
-	snprintf(buffer, MYSENSOR_MAX_MSG_LENGTH, MYSENSORS_MSG_FORMAT "%s\n", node_id, child_sensor_id, message_type, ack, sub_type, payload);
+	mysensors_print_msg_str(buffer, node_id, child_sensor_id, message_type, ack, sub_type, payload);
 	std_puts(buffer);
 }
 
@@ -40,7 +58,7 @@ mysensors_send_int(uint16_t node_id, uint8_t child_sensor_id, uint16_t message_t
 {
 	char buffer[MYSENSOR_MAX_MSG_LENGTH];
 
-	snprintf(buffer, MYSENSOR_MAX_MSG_LENGTH, MYSENSORS_MSG_FORMAT "%d\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
+	mysensors_print_msg_int(buffer, node_id, child_sensor_id, message_type, ack, sub_type, value);
 	std_puts(buffer);
 }
 
@@ -50,7 +68,7 @@ mysensors_send_float(uint16_t node_id, uint8_t child_sensor_id, uint16_t message
 {
 	char buffer[MYSENSOR_MAX_MSG_LENGTH];
 
-	snprintf(buffer, MYSENSOR_MAX_MSG_LENGTH, MYSENSORS_MSG_FORMAT "%.2f\n", node_id, child_sensor_id, message_type, ack, sub_type, value);
+	mysensors_print_msg_float(buffer, node_id, child_sensor_id, message_type, ack, sub_type, value);
 	std_puts(buffer);
 }
 

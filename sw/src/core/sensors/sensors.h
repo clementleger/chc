@@ -152,6 +152,14 @@ sensors_register_watcher(sensor_watcher_t *sensor_watcher);
 sensor_t *
 sensor_create(sensors_type_t type, const char *name, unsigned char id, const sensors_ops_t *ops, void *data);
 
+/**
+ * Get sensor type from string
+ *  
+ * @param str String from whioch we want the type
+ * @return Type matching the string
+ */
+int
+sensor_type_from_string(const char *str);
 
 /**
  * Get a sensor by its id

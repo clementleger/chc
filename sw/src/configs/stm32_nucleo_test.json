@@ -17,6 +17,13 @@
 		"scl": "PA_8",
 		"freq": 100000
 	}],
+	"rs485": [{
+		"name": "rs485_1",
+		"de": "PC_14",
+		"tx": "PA_15",
+		"rx": "PB_7",
+		"baudrate": 38400
+	}],
 	"spi": [{
 		"name": "spi1",
 		"mosi": "PB_15",
@@ -96,6 +103,16 @@
 				"io": "sr1@1",
 				"active_low": 0,
 				"id": 2
+			}
+		],
+		"mysensors_rs485": [
+			{
+				"name": "videoprojector",
+				"type": "switch",
+				"rs485": "rs485_1",
+				"node_id": 0,
+				"sensor_id": 0,
+				"id": 124
 			}
 		],
 		"bme280": [

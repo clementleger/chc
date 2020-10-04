@@ -38,6 +38,20 @@ static const char *sensor_type_to_str[] = {
 };
 
 int
+sensor_type_from_string(const char *str)
+{
+	int i;
+
+	for (i = 0; i <SENSORS_TYPE_COUNT; i++) {
+		if (strcmp(str, sensor_type_to_str[i]) == 0) {
+			return i;
+		}
+	}
+
+	return -1;
+}
+
+int
 sensors_register_handler(sensor_handler_t *sensor_handler)
 {
 	SLIST_INSERT_HEAD(&g_sensors_handler_list, sensor_handler, link);

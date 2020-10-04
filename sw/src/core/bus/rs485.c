@@ -35,7 +35,6 @@ rs485_bus_get_by_name(const char *name)
 	return NULL;
 }
 
-
 int
 rs485_bus_write(rs485_bus_t *rs, const uint8_t *data, unsigned int length)
 {

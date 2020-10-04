@@ -1,6 +1,8 @@
 #ifndef _MYSENSOR_H
 #define _MYSENSOR_H
 
+#include <inttypes.h>
+
 #define MYSENSOR_MAX_MSG_LENGTH		64
 
 typedef enum
@@ -140,5 +142,17 @@ typedef enum
  */
 void
 mysensors_init();
+
+void
+mysensors_print_msg_str(char buffer[MYSENSOR_MAX_MSG_LENGTH], uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
+				uint8_t ack, uint16_t sub_type, char *payload);
+
+void
+mysensors_print_msg_int(char buffer[MYSENSOR_MAX_MSG_LENGTH], uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
+				uint8_t ack, uint16_t sub_type, int value);
+
+void
+mysensors_print_msg_float(char buffer[MYSENSOR_MAX_MSG_LENGTH], uint16_t node_id, uint8_t child_sensor_id, uint16_t message_type,
+				uint8_t ack, uint16_t sub_type, float value);
 
 #endif
