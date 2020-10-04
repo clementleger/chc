@@ -206,7 +206,7 @@ sensor_to_mysensor[SENSORS_TYPE_COUNT] =
 static void
 mysensor_sensor_created(sensor_t *s)
 {
-	mysensors_sensortype_t type = sensor_get_type(s);
+	mysensors_sensortype_t type = sensor_to_mysensor[sensor_get_type(s)];
 
 	mysensors_serial_send_str(g_assigned_node_id, sensor_get_id(s), PRESENTATION, REQUEST, type, sensor_get_name(s));
 }
