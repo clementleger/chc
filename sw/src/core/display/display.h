@@ -280,7 +280,7 @@ static const unsigned char g_display_font[] = {
 	0x00, 0x00, 0x00, 0x00, 0x00  // #255 NBSP
 };
 
-enum disp_color {
+typedef enum disp_color {
 	COLOR_WHITE = 0,
 	COLOR_GRAY,
 	COLOR_SILVER,
