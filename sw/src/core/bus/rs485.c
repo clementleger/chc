@@ -92,7 +92,7 @@ rs485_json_parse_one(json_value* sensor)
 	/* Reader by default */
 	gen_io_write(rs->de, 0);
 
-	dbg_log("Adding rs485 bus %s with %d baudrate\n", rs->name, baudrate);
+	dbg_log("Adding rs485 bus %s with baudrate %d\n", rs->name, baudrate);
 	SLIST_INSERT_HEAD(&g_rs485_bus_list, rs, link);
 
 	return 0;
@@ -119,7 +119,7 @@ static const module_t rs485_module = {
 };
 
 void
-rs485_init()
+rs485_bus_init()
 {
 	module_register(&rs485_module);
 }

@@ -5,6 +5,7 @@
 #include "module.h"
 #include "sensors.h"
 #include "digital_io.h"
+#include "mysensors_rs485.h"
 
 #include <string.h>
 
@@ -360,5 +361,6 @@ sensors_init()
 	bme280_init();
 	bh1750_init();
 	digital_io_init();
+	mysensors_rs485_init();
 	module_register(&sensors_module);
 }

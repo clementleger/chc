@@ -2,7 +2,7 @@
 #define _RS485_H
 
 void
-rs485_init();
+rs485_bus_init();
 
 typedef struct rs485_bus rs485_bus_t;
 

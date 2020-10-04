@@ -5,6 +5,7 @@
 #include "i2c.h"
 #include "utils.h"
 #include "debug.h"
+#include "rs485.h"
 #include "config.h"
 #include "module.h"
 #include "display.h"
@@ -28,6 +29,7 @@ main()
 	spi_bus_init();
 	i2c_bus_init();
 	en_gpio_init();
+	rs485_bus_init();
 
 	network_init();
 	/* Depends on gpio */
