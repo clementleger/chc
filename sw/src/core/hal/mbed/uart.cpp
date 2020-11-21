@@ -89,7 +89,7 @@ hal_uart_setup(const char *tx, const char *rx, unsigned int baudrate)
 	uart->cb->uart = uart;
 
 	uart->serial->attach(uart->cb, &uart_cb::callback, Serial::RxIrq);
-	uart->serial->baud(115200);
+	uart->serial->baud(baudrate);
 
 	return (hal_uart_t *) uart;
 }
