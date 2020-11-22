@@ -19,10 +19,10 @@
 	}],
 	"rs485": [{
 		"name": "rs485_1",
-		"de": "PC_14",
+		"de": "gpio@PC_14",
 		"tx": "PA_15",
 		"rx": "PB_7",
-		"baudrate": 115200
+		"baudrate": 38400
 	}],
 	"spi": [{
 		"name": "spi1",
@@ -528,6 +528,16 @@
 				"id": 73
 			}
 		],
+		"mysensors_rs485": [
+			{
+				"name": "vp",
+				"type": "switch",
+				"rs485": "rs485_1",
+				"node_id": 1,
+				"sensor_id": 1,
+				"id": 100
+			}
+		],
 		"bme280": [
 			{
 				"i2c": "i2c1",
@@ -543,11 +553,6 @@
 				"refresh": 30000,
 				"id": 63,
 				"auto": 1
-			}
-		],
-		"mysensors_rs485": [
-			{
-				"rs485": "rs485_1"
 			}
 		],
 		"constraints": [
