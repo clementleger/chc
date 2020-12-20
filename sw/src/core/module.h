@@ -19,6 +19,8 @@ typedef enum handle_message_ret {
 
 typedef void (*command_handler_t)(int argc, char **argv);
 
+#define MAX_COMMAND_NAME_LEN	64
+
 typedef struct module_command {
 	const char *name;
 	const char *help;

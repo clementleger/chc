@@ -76,6 +76,15 @@ void module_main_loop()
 	}
 }
 
+static void sanitize_arg(char *str)
+{
+	while(*str) {
+		if (*str == '\n')
+			*str = '\0';
+		str++;
+	}
+}
+
 static int
 string_to_args(char *str, char **args) {
 
@@ -87,6 +96,8 @@ string_to_args(char *str, char **args) {
 			*str++ = '\0';
 		if (*str == '\0')
 			break;
+
+		sanitize_arg(str);
 		args[args_count] = str;
 		args_count++;
 		if (args_count == MAX_CMD_ARGS)
@@ -142,7 +153,7 @@ module_handle_command(char *buf, unsigned int len)
 	TAILQ_FOREACH(rmod, &g_active_module, link) {
 		mod = rmod->mod;
 		for (i = 0; i < mod->command_count; i++) {
-			if (strncmp(mod->commands[i].name, cmd_args[0], strlen(mod->commands[i].name)) == 0) {
+			if (strncmp(mod->commands[i].name, cmd_args[0], MAX_COMMAND_NAME_LEN) == 0) {
 				mod->commands[i].hdler(argc, cmd_args);
 				dbg_puts("$ ");
 				return;
