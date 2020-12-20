@@ -15,7 +15,7 @@
 typedef struct sensor_bme280 {
 	uint8_t addr;
 	i2c_bus_t *i2c;
-	unsigned long long refresh_time;
+	unsigned long long refresh_millis;
 	unsigned long long last_refresh;
 
 	/* Compensation parameters */
@@ -176,11 +176,11 @@ bme280_poll_one(bme280_t *bme280)
 	uint32_t press_raw, temp_raw, hum_raw;
 	sensor_value_t temp, hum, press;
 
-	unsigned long long time = hal_get_milli();
-	if ((time - bme280->last_refresh) < bme280->refresh_time)
+	unsigned long long millis = hal_get_milli();
+	if ((millis - bme280->last_refresh) < bme280->refresh_millis)
 		return;
 
-	bme280->last_refresh =time;
+	bme280->last_refresh =millis;
 
 	/* Read the whole temp + humid + pressure in one i2c burst */
 	samples[0] = 0xF7;
@@ -239,7 +239,7 @@ bme280_json_parse_one(json_value* section)
 		} else if (strcmp(name, "i2c") == 0) {
 			bme280->i2c = i2c_bus_get_by_name(value->u.string.ptr);
 		} else if (strcmp(name, "refresh") == 0) {
-			bme280->refresh_time = value->u.integer;
+			bme280->refresh_millis = value->u.integer;
 		}else if (strcmp(name, "id") == 0) {
 			id = value->u.integer;
 		}

@@ -10,6 +10,7 @@ Timer t;
 extern "C" void
 hal_system_init()
 {
+	set_time(0);
 	t.start();
 	pc_serial.baud(115200);
 }

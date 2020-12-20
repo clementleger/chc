@@ -126,17 +126,17 @@ display_json_parse(json_value* section)
 static void
 display_main_loop()
 {
-	unsigned long long time = hal_get_milli();
+	unsigned long long millis = hal_get_milli();
 	unsigned int h, s, m;
 	char buffer[10];
 	div_t qr;
 
-	if ((time - g_display.last_refresh) < DISPLAY_REFRESH_TIME)
+	if ((millis - g_display.last_refresh) < DISPLAY_REFRESH_TIME)
 		return;
 
-	g_display.last_refresh = time;
+	g_display.last_refresh = millis;
 
-	qr = div(time, 1000 * 60 * 60);
+	qr = div(millis, 1000 * 60 * 60);
 	h = qr.quot;
 
 	qr = div(qr.rem, 1000 * 60);
