@@ -46,7 +46,6 @@ static char *g_master_server;
 net_if_con_t g_net_con[COM_TYPE_COUNT] = {{.port = NET_STD_PORT}, {.port = NET_DBG_PORT}};
 network_proto_t g_net_proto = NET_PROTO_TCP;
 
-
 static int
 network_udp_main_loop(com_type_t com_type, char *buf, unsigned int size)
 {
@@ -380,6 +379,40 @@ network_json_parse(json_value* section)
 	return wiznet_parse_json(data);
 }
 
+static void
+handle_net_info(int argc, char **argv)
+{
+
+	dbg_puts("mac:\t%02X:%02X:%02X:%02X:%02X:%02X\n",
+		g_mac[0],g_mac[1],g_mac[2],g_mac[3],g_mac[4],g_mac[5]);
+
+	if (g_net_iface)
+		dbg_puts("ip:\t%s\n", wiznet_iface_get_ip(g_net_iface));
+}
+
+static void
+handle_net_reset(int argc, char **argv)
+{
+	if (g_net_proto == NET_PROTO_TCP) {
+		if (g_net_con[COM_TYPE_STD].tcp_sock) {
+			wiznet_tcp_sock_close(g_net_con[COM_TYPE_STD].tcp_sock);
+		}
+	}
+}
+
+static module_command_t net_commands[] =
+{
+	{
+		.name = "net_info",
+		.help = "Display network information",
+		.hdler = handle_net_info,
+	},
+	{
+		.name = "net_reset",
+		.help = "Reset network sockets",
+		.hdler = handle_net_reset,
+	}
+};
 
 /**
  * Module
@@ -388,6 +421,7 @@ static const module_t network_module = {
 	.name = "network",
 	.main_loop = network_main_loop,
 	.json_parse = network_json_parse,
+	MODULE_COMMANDS(net_commands),
 };
 
 void
