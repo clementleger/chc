@@ -59,6 +59,7 @@ rs485_json_parse_one(json_value* sensor)
 	int length, i;
 	json_value *value;
 	rs485_bus_t *rs;
+	bool soft = 0;
 	const char *name;
 	const char *tx = NULL, *rx = NULL;
 	unsigned int baudrate = DEFAULT_BAUDRATE;
@@ -81,12 +82,14 @@ rs485_json_parse_one(json_value* sensor)
 			rx = value->u.string.ptr;
 		} else if (strcmp(name, "baudrate") == 0) {
 			baudrate = value->u.integer;
+		} else if (strcmp(name, "softserial") == 0) {
+			soft = value->u.integer;
 		} 
         }
 
         PANIC_ON(rx == NULL || tx == NULL || rs->de == NULL, "Missing parameters for rs485 bus");
 
-	rs->uart = hal_uart_setup(tx, rx, baudrate);
+	rs->uart = hal_uart_setup(tx, rx, baudrate, soft);
 	PANIC_ON(rs->uart == NULL, "Failed to create uart for rs485 bus");
 	
 	/* Reader by default */

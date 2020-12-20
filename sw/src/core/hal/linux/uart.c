@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 hal_uart_t *
-hal_uart_setup(const char *tx, const char *rx, unsigned int baudrate)
+hal_uart_setup(const char *tx, const char *rx, unsigned int baudrate, bool soft)
 {
 	return NULL;
 }

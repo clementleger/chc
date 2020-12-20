@@ -3,6 +3,7 @@
 
 #include <stdarg.h>
 #include <inttypes.h>
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -180,7 +181,7 @@ typedef struct hal_uart hal_uart_t;
  * Initialize I2C bus 
  */
 hal_uart_t *
-hal_uart_setup(const char *tx, const char *rx, unsigned int baudrate);
+hal_uart_setup(const char *tx, const char *rx, unsigned int baudrate, bool soft);
 
 /**
  * Write data to uart bus
