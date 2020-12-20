@@ -10,6 +10,8 @@
 
 #include <string.h>
 
+#define MAX_MSG_RECV_SIZE	1500
+
 enum default_port {
 	NET_STD_PORT = 13489,
 	NET_DBG_PORT,
@@ -96,21 +98,22 @@ static int (* proto_main_loop[])(com_type_t /* com_type*/, char * /* buf */, uns
 	[NET_PROTO_TCP] = network_tcp_main_loop,
 };
 
+char g_recv_buf[MAX_MSG_RECV_SIZE];
+
 static void
 network_main_loop(void)
 {
-	char buf[MYSENSOR_MAX_MSG_LENGTH];
 	int size;
 	com_type_t type = COM_TYPE_STD;
 	
 	for (type = COM_TYPE_STD; type < COM_TYPE_COUNT; type++) {
-		size = proto_main_loop[g_net_proto](type, buf, MYSENSOR_MAX_MSG_LENGTH);
+		size = proto_main_loop[g_net_proto](type, g_recv_buf, MAX_MSG_RECV_SIZE);
 		if (size == 0)
 			continue;
 
-		buf[size] = '\0';
-		dbg_log("Message received from network type %d\n", type);
-		module_handle_message(type, buf, size);
+		g_recv_buf[size] = '\0';
+		dbg_log("Message received (%d bytes) from network type %d\n", size, type);
+		module_handle_message(type, g_recv_buf, size);
 	}
 }
 
